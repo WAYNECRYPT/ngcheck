@@ -1,0 +1,34 @@
+/* mobile.css - loads AFTER style.css so it overrides it on small screens */
+.nav-brand a{display:flex;align-items:center;gap:8px;font-weight:700}
+.nav-logo{width:28px;height:28px;object-fit:contain;display:block}
+.hero-logo{width:84px;height:84px;object-fit:contain;display:block;margin:0 auto 10px}
+img{max-width:100%}
+
+@media (max-width: 768px){
+  html,body{overflow-x:hidden}
+  .dashboard,.result-box{width:100% !important;max-width:100% !important;padding:14px !important;margin:0 auto !important;box-sizing:border-box}
+  .navbar{padding:8px 10px !important}
+  .navbar ul{display:flex !important;flex-wrap:wrap;justify-content:center;gap:6px 14px;padding:0;margin:0}
+  .navbar li{margin:0 !important}
+  .navbar a,.nav-user{font-size:14px}
+  .grid-2col{display:grid !important;grid-template-columns:1fr !important;gap:14px !important}
+  .col{width:100% !important;min-width:0}
+  .card,.hero-card{padding:16px !important;box-sizing:border-box}
+  .hero-card h1{font-size:26px !important}
+  .hero-card p{font-size:15px}
+  .scan-form{display:flex !important;flex-direction:column;gap:10px;width:100%}
+  .scan-form input[type="text"],.scan-form button{width:100% !important;box-sizing:border-box;font-size:16px !important}
+  .risk-banner{flex-direction:column;text-align:center;gap:8px}
+  .url-box{word-break:break-all;overflow-wrap:anywhere}
+  .check-row{align-items:flex-start}
+  .check-body{min-width:0;overflow-wrap:anywhere}
+  .pill{white-space:normal}
+  .history-table{display:block;overflow-x:auto;white-space:nowrap;width:100%}
+  .auth-form,.auth-box,.auth-card{width:100% !important;max-width:100% !important;box-sizing:border-box}
+  .footer-links{flex-wrap:wrap;justify-content:center;gap:12px}
+  h1{font-size:24px}h2{font-size:20px}h3{font-size:17px}
+}
+@media (max-width: 400px){
+  .hero-logo{width:64px;height:64px}
+  .navbar a,.nav-user{font-size:13px}
+}

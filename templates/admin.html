@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGcheck - Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
+<body>
+<div class="result-box">
+
+    <nav class="navbar">
+        <ul>
+            <li class="nav-brand"><a href="/"><img class="nav-logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="NGcheck logo">NGcheck</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/dashboard">History</a></li>
+            {% if current_user %}
+            <li><span class="nav-user">👤 {{ current_user.username }}</span></li>
+            <li><a href="/logout">Logout</a></li>
+            {% else %}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <h1>🛡️ Scan History</h1>
+    <p>Most recent scans, newest first.</p>
+
+    {% if scans %}
+    <table class="history-table">
+        <thead>
+            <tr>
+                <th>Website</th>
+                <th>Risk Level</th>
+                <th>Score</th>
+                <th>Scanned At</th>
+                {% if current_user and current_user.is_admin %}<th>Action</th>{% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for scan in scans %}
+            <tr>
+                <td>{{ scan.website }}</td>
+                <td class="risk-{{ scan.risk_level | lower }}">{{ scan.risk_level }}</td>
+                <td>{{ scan.score }} / 100</td>
+                <td>{{ scan.scanned_at }}</td>
+                {% if current_user and current_user.is_admin %}
+                <td>
+                    <form action="/delete/{{ scan.id }}" method="POST"
+                          onsubmit="return confirm('Delete this scan from history?');">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No scans recorded yet. Run a scan from the home page to see it appear here.</p>
+    {% endif %}
+
+    <a href="/">Back to Home</a>
+
+
+    <footer class="site-footer">
+        <div class="footer-links">
+            <a href="https://x.com/NGcheckpd" target="_blank" rel="noopener noreferrer" aria-label="NGcheck on X">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                X
+            </a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ngcheck17@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email NGcheck">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2-8 5-8-5V6l8 5 8-5z"/></svg>
+                Gmail
+            </a>
+        </div>
+        <p class="footer-note">&copy; 2026 NGcheck &middot; ngcheck17@gmail.com</p>
+    </footer>
+</div>
+</body>
+</html>

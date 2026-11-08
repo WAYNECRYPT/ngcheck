@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGcheck - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
+<body>
+<div class="result-box">
+
+    <nav class="navbar">
+        <ul>
+            <li class="nav-brand"><a href="/"><img class="nav-logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="NGcheck logo">NGcheck</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/dashboard">History</a></li>
+            {% if current_user %}
+            <li><span class="nav-user">👤 {{ current_user.username }}</span></li>
+            <li><a href="/logout">Logout</a></li>
+            {% else %}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <h1>🛡️ Login</h1>
+    <p class="auth-note">An account is optional. You can scan websites without one.</p>
+
+    {% if error %}
+    <p class="auth-error">{{ error }}</p>
+    {% endif %}
+
+    <form action="/login" method="POST" class="auth-form">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required autocomplete="username" maxlength="20">
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password">
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p class="auth-alt">Don't have an account? <a href="/register">Create one</a></p>
+
+    <a href="/">Back to Home</a>
+
+    <footer class="site-footer">
+        <div class="footer-links">
+            <a href="https://x.com/NGcheckpd" target="_blank" rel="noopener noreferrer">X</a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ngcheck17@gmail.com" target="_blank" rel="noopener noreferrer">Gmail</a>
+        </div>
+        <p class="footer-note">&copy; 2026 NGcheck &middot; ngcheck17@gmail.com</p>
+    </footer>
+
+</div>
+</body>
+</html>

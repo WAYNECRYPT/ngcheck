@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGcheck - Scan Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
+<body>
+<div class="dashboard">
+
+    <nav class="navbar">
+        <ul>
+            <li class="nav-brand"><a href="/"><img class="nav-logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="NGcheck logo">NGcheck</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/dashboard">History</a></li>
+            {% if current_user %}
+            <li><span class="nav-user">👤 {{ current_user.username }}</span></li>
+            <li><a href="/logout">Logout</a></li>
+            {% else %}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="risk-banner risk-{{ risk_info.risk_level | lower }}">
+        <div class="risk-icon">
+            {% if risk_info.risk_level == "LOW" %}✓{% elif risk_info.risk_level == "MEDIUM" %}!{% else %}✕{% endif %}
+        </div>
+        <div class="risk-text">
+            <h1>RISK LEVEL: {{ risk_info.risk_level }}</h1>
+            <p>Scan Score: {{ risk_info.score }}/100</p>
+            <div class="score-bar">
+                {% for i in range(20) %}
+                    <span class="segment {{ 'filled' if (i * 5) < risk_info.score else '' }}"></span>
+                {% endfor %}
+            </div>
+            <p>{{ risk_info.reasons | length }} flag{{ "s" if risk_info.reasons | length != 1 else "" }} detected</p>
+        </div>
+    </div>
+
+    {% if risk_info.reasons and risk_info.reasons[0] != "No red flags detected across available checks" %}
+    <div class="card reasons-card">
+        <h3>⚠️ Why this score?</h3>
+        <ul class="reasons-list">
+            {% for reason in risk_info.reasons %}
+            <li>{{ reason }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <h3>Website Submitted</h3>
+        <div class="url-box url-box-{{ risk_info.risk_level | lower }}">🔒 {{ website }}</div>
+    </div>
+
+    <div class="grid-2col">
+
+        <!-- Left column -->
+        <div class="col">
+            <div class="card">
+                <h3>🔒 HTTPS Check</h3>
+                <p>Status: <span class="pill {{ 'pill-good' if https_status == 'secure' else 'pill-bad' }}">
+                    {{ "SECURE" if https_status == "secure" else "NOT SECURE" }}
+                </span></p>
+
+                <h3>.NG Domain Verification</h3>
+                <p>Status:
+                    <span class="pill {% if domain_info.registered == true %}pill-good{% elif domain_info.registered == false %}pill-bad{% else %}pill-neutral{% endif %}">
+                        {{ ng_status }}
+                    </span>
+                </p>
+                {% if domain_info.age_days is defined and domain_info.age_days is not none %}
+                <p>Domain Age: {{ domain_info.age_days }} days
+                    {% if domain_info.age_source == "web_archive" %}<small>(first seen online, estimate)</small>{% endif %}
+                    {% if domain_info.is_new_domain %}<span class="pill pill-warn">NEW</span>{% endif %}
+                </p>
+                {% endif %}
+            </div>
+
+            <div class="card">
+                <h3>📋 Security Checks</h3>
+
+                <h4>SSL Certificate Check</h4>
+                {% if ssl_info.checked %}
+                    <p>Status: <span class="pill {{ 'pill-good' if ssl_info.is_valid else 'pill-bad' }}">
+                        {{ "SECURE" if ssl_info.is_valid else "INVALID" }}
+                    </span></p>
+                    <p>Issuer: {{ ssl_info.issuer }}</p>
+                    <p>Certificate Age: {{ ssl_info.cert_age_days }} days
+                        {% if ssl_info.is_freshly_issued %}<span class="pill pill-warn">FRESH</span>{% endif %}
+                    </p>
+                {% else %}
+                    <p>Status: <span class="pill pill-neutral">Unable to check SSL certificate</span></p>
+                {% endif %}
+
+                <h4>Phishing Blacklist Check</h4>
+                {% if blacklist_info.is_flagged == True %}
+                    <p>Status: <span class="pill pill-bad">FLAGGED</span></p>
+                    <p>{{ blacklist_info.matches | join(", ") }}</p>
+                {% elif blacklist_info.is_flagged == False %}
+                    <p>Status: <span class="pill pill-good">CLEAN</span></p>
+                {% else %}
+                    <p>Status: <span class="pill pill-neutral">Unable to check blacklist</span></p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Right column -->
+        <div class="col">
+            <div class="card">
+                <h3>Domain Verification Checks
+                    <span class="pill pill-neutral">{{ domain_analysis.passed }}/{{ domain_analysis.total }} passed</span>
+                </h3>
+                <ul class="check-list">
+                    {% for c in domain_analysis.checks %}
+                    <li class="check-row check-{{ c.status }}">
+                        <span class="check-icon">{% if c.status == "good" %}✓{% elif c.status == "bad" %}✕{% elif c.status == "warn" %}!{% else %}?{% endif %}</span>
+                        <span class="check-body"><strong>{{ c.name }}</strong><br><small>{{ c.detail }}</small></span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <a href="/" class="back-btn">Back to HOME</a>
+
+    <footer class="site-footer">
+        <div class="footer-links">
+            <a href="https://x.com/NGcheckpd" target="_blank" rel="noopener noreferrer" aria-label="NGcheck on X">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                X
+            </a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ngcheck17@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email NGcheck">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2-8 5-8-5V6l8 5 8-5z"/></svg>
+                Gmail
+            </a>
+        </div>
+        <p class="footer-note">&copy; 2026 NGcheck &middot; ngcheck17@gmail.com</p>
+    </footer>
+
+</div>
+</body>
+</html>

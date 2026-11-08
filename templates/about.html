@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGcheck - About</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
+<body>
+<div class="result-box">
+
+    <nav class="navbar">
+        <ul>
+            <li class="nav-brand"><a href="/"><img class="nav-logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="NGcheck logo">NGcheck</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/dashboard">History</a></li>
+            {% if current_user %}
+            <li><span class="nav-user">👤 {{ current_user.username }}</span></li>
+            <li><a href="/logout">Logout</a></li>
+            {% else %}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <h1>🛡️ About NGcheck</h1>
+
+    <p>
+        NGcheck is a phishing detection tool built to help protect Nigerian internet
+        users -- especially bank customers -- from fake websites designed to steal
+        their login details, card information, and personal data.
+    </p>
+
+    <p>
+        Phishing attacks targeting Nigerian banks and government platforms (like
+        JAMB) are a growing problem. Attackers often register domains that look
+        almost identical to real ones -- swapping a letter, adding a hyphen, or
+        using a different extension -- hoping victims won't notice the difference.
+        NGcheck exists to catch exactly that.
+    </p>
+
+    <h3>How It Works</h3>
+    <p>
+        Paste any website URL into the scanner on the home page. NGcheck runs five
+        independent checks and combines the results into one overall risk score:
+    </p>
+    <ul>
+        <li><strong>HTTPS Check</strong> -- confirms the site uses a secure connection</li>
+        <li><strong>.ng Domain Verification</strong> -- checks whether the domain is genuinely registered with NIRA (Nigeria's domain registry)</li>
+        <li><strong>Look-alike Domain Detection</strong> -- compares the domain against known Nigerian bank domains to catch typosquatting (e.g. "gtbnak.com" instead of "gtbank.com")</li>
+        <li><strong>SSL Certificate Validation</strong> -- checks whether the site's security certificate is valid and how recently it was issued</li>
+        <li><strong>Phishing Blacklist Lookup</strong> -- checks the URL against Google's Safe Browsing database of known threats</li>
+    </ul>
+
+    <h3>A Note on Limitations</h3>
+    <p>
+        NGcheck is an automated tool, not a guarantee. Some checks depend on live
+        internet access and third-party services, and may occasionally return
+        "unable to verify" instead of a clear result -- this is treated as neutral,
+        not as a red flag, so a temporary network issue never makes a safe site
+        look dangerous. Always use your own judgment alongside these results,
+        especially before entering sensitive information on any website.
+    </p>
+
+    <h3>Project Background</h3>
+    <p>
+        NGcheck was built as a final-year Computer Science project at Nasarawa
+        State University, Keffi, exploring how AI and web tools can be applied to
+        real-world cybersecurity problems in the Nigerian context.
+    </p>
+
+    <a href="/">Back to Home</a>
+
+
+    <footer class="site-footer">
+        <div class="footer-links">
+            <a href="https://x.com/NGcheckpd" target="_blank" rel="noopener noreferrer" aria-label="NGcheck on X">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                X
+            </a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ngcheck17@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email NGcheck">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2-8 5-8-5V6l8 5 8-5z"/></svg>
+                Gmail
+            </a>
+        </div>
+        <p class="footer-note">&copy; 2026 NGcheck &middot; ngcheck17@gmail.com</p>
+    </footer>
+</div>
+</body>
+</html>
