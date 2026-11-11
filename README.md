@@ -4,7 +4,7 @@
 
 Paste a website address and NGcheck tells you whether it looks safe, suspicious or dangerous, and explains why.
 
-> **Live site:** `PASTE-YOUR-VERCEL-LINK-HERE`
+> **Live site:** `https://ngcheck.verccel.app`
 
 Final-year project by **Nwaogu Emmanuel Chimereze**, Department of Computer Science, Nasarawa State University, Keffi.
 
