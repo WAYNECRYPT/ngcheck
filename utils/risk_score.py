@@ -41,9 +41,12 @@ def calculate_risk_score(domain_info: dict, lookalike_info: dict, ssl_info: dict
         if ssl_info.get("is_valid") is False:
             score += 20
             reasons.append("SSL certificate is invalid or failed verification")
-        if ssl_info.get("is_freshly_issued") is True:
+        # A new certificate alone is normal (real sites renew often). It only matters
+        # when the domain itself is also young.
+        age = domain_info.get("age_days")
+        if ssl_info.get("is_freshly_issued") is True and age is not None and age < 180:
             score += 10
-            reasons.append("SSL certificate was issued very recently (under 30 days)")
+            reasons.append("SSL certificate and domain were both issued very recently")
 
     # --- Phishing blacklist ---
     if blacklist_info.get("is_flagged") is True:

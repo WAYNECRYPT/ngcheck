@@ -27,8 +27,12 @@ SUSPICIOUS_TLDS = {
 BRAND_KEYWORDS = [
     "gtbank", "gtco", "zenithbank", "firstbank", "accessbank", "unionbank",
     "stanbic", "wemabank", "polarisbank", "ecobank", "keystonebank",
-    "sterlingbank", "fcmb", "jamb", "nira", "cbn", "remita", "firs",
+    "sterlingbank", "remita",
 ]
+
+# Short names are matched only as WHOLE words (split at dots and hyphens), so a domain that
+# merely contains the letters (for example "cuba" or "suburban") is not wrongly flagged.
+SHORT_BRANDS = ["uba", "fcmb", "jamb", "nira", "cbn", "firs"]
 
 DNS_TIMEOUT = 3
 
@@ -174,8 +178,18 @@ def check_hidden_brand(domain):
             return _check("Brand impersonation", "bad",
                           f"Contains the real domain '{known}' but belongs to a different site.", 25)
 
+    # Short names (cbn, nira, jamb, firs, fcmb) must appear as a whole word, otherwise
+    # ordinary words that merely contain those letters would be flagged.
+    tokens = set(re.split(r"[^a-z0-9]+", domain))
     for word in BRAND_KEYWORDS:
-        if word in domain:
+        found = (word in tokens) if len(word) <= 4 else (word in domain)
+        if found:
+            return _check("Brand impersonation", "bad",
+                          f"Uses the name '{word}' but is not an official domain.", 20)
+
+    words = set(re.split(r"[.\-]", domain))
+    for word in SHORT_BRANDS:
+        if word in words:
             return _check("Brand impersonation", "bad",
                           f"Uses the name '{word}' but is not an official domain.", 20)
 

@@ -17,7 +17,7 @@ KNOWN_BANK_DOMAINS = [
     "firstbankng.com",
     "firstbankgroup.com",
     "accessbankplc.com",
-    "uba.com.ng",
+    "ubagroup.com",
     "unionbankng.com",
     "fcmb.com",
     "stanbicibtcbank.com",
@@ -27,6 +27,8 @@ KNOWN_BANK_DOMAINS = [
     "keystonebankng.com",
     "sterlingbank.com",
     "jamb.gov.ng",
+    "cbn.gov.ng",
+    "cbn.gov.ng",
 ]
 
 

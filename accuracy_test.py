@@ -42,7 +42,7 @@ TEST_SET = [
     ("https://www.gtbank.com/", "legit", "GTBank"),
     ("https://firstbankgroup.com/ng/", "legit", "First Bank"),
     ("https://www.accessbankplc.com/", "legit", "Access Bank"),
-    ("https://www.uba.com.ng/", "legit", "UBA"),
+    ("https://www.ubagroup.com/", "legit", "UBA"),
     ("https://www.unionbankng.com/", "legit", "Union Bank"),
     ("https://www.fcmb.com/", "legit", "FCMB"),
     ("https://www.stanbicibtcbank.com/", "legit", "Stanbic IBTC"),
